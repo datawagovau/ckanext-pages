@@ -1,5 +1,5 @@
 import ckan.plugins as p
-import ckan.new_authz as new_authz
+import ckan.authz as authz
 
 import db
 
@@ -18,11 +18,14 @@ if p.toolkit.check_ckan_version(min_version='2.2'):
 
 
 def group_admin(context, data_dict):
-    return p.toolkit.check_access('group_update', context, data_dict)
+    if 'org_id' in data_dict:
+        data_dict = {'id': data_dict['org_id']}
+    return {
+        'success': p.toolkit.check_access('group_update', context, data_dict)
+    }
 
 
-def org_admin(context, data_dict):
-    return p.toolkit.check_access('group_update', context, data_dict)
+org_admin = group_admin
 
 
 def page_privacy(context, data_dict):
@@ -40,7 +43,7 @@ def page_privacy(context, data_dict):
         return {'success': True}
     group = context['model'].Group.get(org_id)
     user = context['user']
-    authorized = new_authz.has_user_permission_for_group_or_org(group.id,
+    authorized = authz.has_user_permission_for_group_or_org(group.id,
                                                                 user,
                                                                 'read')
     if not authorized:
