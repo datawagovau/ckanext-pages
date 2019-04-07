@@ -90,7 +90,7 @@ class PagesController(p.toolkit.BaseController):
             _page['org_id'] = p.toolkit.c.group_dict['id'],
             _page['page'] = page
             try:
-                junk = p.toolkit.get_action('ckanext_pages_update')(
+                junk = p.toolkit.get_action('ckanext_org_pages_update')(
                     data_dict=_page
                 )
             except p.toolkit.ValidationError, e:
@@ -167,7 +167,7 @@ class PagesController(p.toolkit.BaseController):
             _page['org_id'] = p.toolkit.c.group_dict['id']
             _page['page'] = page
             try:
-                junk = p.toolkit.get_action('ckanext_pages_update')(
+                junk = p.toolkit.get_action('ckanext_group_pages_update')(
                     data_dict=_page
                 )
             except p.toolkit.ValidationError, e:
